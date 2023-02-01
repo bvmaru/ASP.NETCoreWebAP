@@ -105,6 +105,102 @@ namespace ASP.NETCoreWebAP.Controllers
             return NoContent();
         }
 
+        [HttpGet("oldest student")]
+        public IEnumerable<StudentAgeDto> GetStudentsOldestStudent()
+        {
+            var students = _dbContext.Students.ToList();
+            int age = 0;
+            List <Student> oldestStudents = new List<Student>();
+            foreach (var student2 in students)
+            {
+                if (student2.Age > age)
+                {
+                    age = student2.Age;
+                }
+            }
+            foreach (var student in students)
+            {
+                if(age == student.Age)
+                {
+                    oldestStudents.Add(student);
+                }
+            }
+
+            return oldestStudents.Select(x => new StudentAgeDto
+            {
+                Id = x.StudentId,
+                Name = x.Name,
+                LastName = x.LastName,
+                Age = x.Age
+            });
+        }
+
+
+        [HttpGet("youngest student")]
+        public IEnumerable<StudentAgeDto> GetStudentsYoungestStudent()
+        {
+            var students = _dbContext.Students.ToList();
+            int age = 0;
+            if (students.Count != 0)
+            {
+                age = students[0].Age;
+            }
+            List<Student> youngestStudents = new List<Student>();
+            foreach (var student2 in students)
+            {
+                if (student2.Age < age)
+                {
+                    age = student2.Age;
+                }
+            }
+            foreach (var student in students)
+            {
+                if (age == student.Age)
+                {
+                    youngestStudents.Add(student);
+                }
+            }
+
+            return youngestStudents.Select(x => new StudentAgeDto
+            {
+                Id = x.StudentId,
+                Name = x.Name,
+                LastName = x.LastName,
+                Age = x.Age
+            });
+        }
+
+        [HttpGet("older than average student")]
+        public IEnumerable<StudentAgeDto> GetStudentsOlderThanAveragetStudent()
+        {
+            var students = _dbContext.Students.ToList();
+            var studentsCount = students.Count();
+            var sumAge = students.Sum(x => x.Age);
+            int age = sumAge / studentsCount;
+            List<Student> olderStudents = new List<Student>();
+            foreach (var student2 in students)
+            {
+                if (student2.Age > age)
+                {
+                    age = student2.Age;
+                }
+            }
+            foreach (var student in students)
+            {
+                if (age == student.Age)
+                {
+                    olderStudents.Add(student);
+                }
+            }
+
+            return olderStudents.Select(x => new StudentAgeDto
+            {
+                Id = x.StudentId,
+                Name = x.Name,
+                LastName = x.LastName,
+                Age = x.Age
+            });
+        }
 
     }
 }

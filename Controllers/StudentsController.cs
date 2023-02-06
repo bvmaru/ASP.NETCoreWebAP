@@ -202,5 +202,17 @@ namespace ASP.NETCoreWebAP.Controllers
             });
         }
 
+        [HttpPut("edytuj status studenta {id}")]
+        public ActionResult UpdateStudentStatus([FromRoute] int id, [FromBody] StudentIsActiveDto studentIsActiveDto)
+        {
+            var student = _dbContext.Students.FirstOrDefault(x => x.StudentId == id);
+            if (student == null)
+                return NotFound();
+            student.IsActive = studentIsActiveDto.IsActive;
+            _dbContext.SaveChanges();
+            return NoContent();
+        }
+
+
     }
 }
